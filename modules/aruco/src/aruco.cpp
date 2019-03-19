@@ -44,6 +44,8 @@ the use of this software, even if advised of the possibility of such damage.
 #include "apriltag_quad_thresh.hpp"
 #include "zarray.hpp"
 
+#include <iostream>
+
 //#define APRIL_DEBUG
 #ifdef APRIL_DEBUG
 #include "opencv2/imgcodecs.hpp"
@@ -1745,7 +1747,10 @@ void drawAxis(InputOutputArray _image, InputArray _cameraMatrix, InputArray _dis
     axisPoints.push_back(Point3f(0, length, 0));
     axisPoints.push_back(Point3f(0, 0, length));
     vector< Point2f > imagePoints;
-    projectPoints(axisPoints, _rvec, _tvec, _cameraMatrix, _distCoeffs, imagePoints);
+    std::cout << "Projecting fisheye points\n";
+    cv::fisheye::projectPoints(axisPoints, imagePoints, _rvec, _tvec, _cameraMatrix, _distCoeffs, 0, cv::noArray());
+
+    // projectPoints(axisPoints, _rvec, _tvec, _cameraMatrix, _distCoeffs, imagePoints);
 
     // draw axis lines
     line(_image, imagePoints[0], imagePoints[1], Scalar(0, 0, 255), 3);
